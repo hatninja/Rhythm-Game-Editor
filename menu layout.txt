@@ -1,0 +1,7 @@
+Menu structure:
+
+Song > Game > Beatmap 
+
+If a game has no beatmap, then ask to create one or copy one from another.
+
+
