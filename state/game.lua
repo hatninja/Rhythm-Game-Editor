@@ -1,5 +1,6 @@
 Game = {}
 
+local lg = love.graphics
 local floor,min,max = math.floor,math.min,math.max
 
 local beepsnd = love.audio.newSource("beep.wav","static")
@@ -26,45 +27,56 @@ end
 
 function Game.draw()
 	Game.managers[1]:draw()
+	
+	Game.drawBeatmap()
+	
+	--Position
+	lg.setColor(0,0,255)
+	lg.line(400,500,400,600)
 
+	--FPS
+	lg.setColor(255,255,255)
+	lg.print(love.timer.getFPS())
+end
+
+function Game.drawBeatmap()
 	local duration = Game.song:getDuration()
-	
 	--[[Beatmap panel]]
-	love.graphics.setColor(100,100,100)
-	love.graphics.rectangle("fill",0,500,800,100)
+	lg.setColor(100,100,100)
+	lg.rectangle("fill",0,500,800,100)
 	
-	love.graphics.push()
-	love.graphics.translate(-Game.song:getPos()*gridzoom+400,500)
+	lg.push()
+	lg.translate(-Game.song:getPos()*gridzoom+400,500)
 	
 	--Seconds
-	love.graphics.setColor(130,130,130)
+	lg.setColor(130,130,130)
 	for i=max(floor(Game.song:getPos())-400/gridzoom,0),min(floor(Game.song:getPos())+400/gridzoom,duration) do
-		love.graphics.line(i*gridzoom,0,i*gridzoom,100)
+		lg.line(i*gridzoom,0,i*gridzoom,100)
 	end
 
 	--Waveform
-	love.graphics.setColor(255,255,255,255)
+	lg.setColor(255,255,255,255)
 	for i=1,#waveform_quads do
 		if (i-1)*waveform_quadwidth < Game.song:getPos()*gridzoom+400 or (i)*waveform_quadwidth > Game.song:getPos()*gridzoom-400 then
-			love.graphics.draw(waveformimg,waveform_quads[i],(i-1)*waveform_quadwidth,0)
+			lg.draw(waveformimg,waveform_quads[i],(i-1)*waveform_quadwidth,0)
 		end
 	end
 	
 	--Start/End
-	love.graphics.setColor(0,255,0); love.graphics.line(0,0,0,100)
-	love.graphics.setColor(255,0,0); love.graphics.line(duration*gridzoom,0,duration*gridzoom,100)
+	lg.setColor(0,255,0); lg.line(0,0,0,100)
+	lg.setColor(255,0,0); lg.line(duration*gridzoom,0,duration*gridzoom,100)
 	
 	
 	--Off-Beats
-	love.graphics.setColor(0,200,200)
+	lg.setColor(0,200,200)
 	for i=Game.song.offset+Game.song.rate/2, duration, Game.song.rate do
-		love.graphics.line(i*gridzoom,25,i*gridzoom,75)
+		lg.line(i*gridzoom,25,i*gridzoom,75)
 	end
 	
 	--Beats
-	love.graphics.setColor(0,255,255)
+	lg.setColor(0,255,255)
 	for i=Game.song.offset, duration, Game.song.rate do
-		love.graphics.line(i*gridzoom,10,i*gridzoom,90)
+		lg.line(i*gridzoom,10,i*gridzoom,90)
 	end
 	
 	for i,node in ipairs(Game.beatmap) do
@@ -78,23 +90,15 @@ function Game.draw()
 				end
 			end
 			
-			love.graphics.setColor(255,255,255)
-			love.graphics.circle("fill", node[2]*gridzoom,50+yoffset,10)
-			love.graphics.setColor(0,0,0)
-			love.graphics.circle("line", node[2]*gridzoom,50+yoffset,10)
-			love.graphics.print(node[1], node[2]*gridzoom-3,43+yoffset)
+			lg.setColor(255,255,255)
+			lg.circle("fill", node[2]*gridzoom,50+yoffset,10)
+			lg.setColor(0,0,0)
+			lg.circle("line", node[2]*gridzoom,50+yoffset,10)
+			lg.print(node[1], node[2]*gridzoom-3,43+yoffset)
 		end
 	end
 	
-	love.graphics.pop()
-	
-	--Position
-	love.graphics.setColor(0,0,255)
-	love.graphics.line(400,500,400,600)
-
-	--FPS
-	love.graphics.setColor(255,255,255)
-	love.graphics.print(love.timer.getFPS())
+	lg.pop()
 end
 
 function Game.update(dt)
@@ -107,8 +111,8 @@ function Game.update(dt)
 		
 			for i,game in ipairs(Game.managers) do game:count(Game.count, Game.totalcount) end
 			
-			Game.count = (Game.count + 1) % 16
-			Game.totalcount = Game.totalcount + 1
+			Game.count = (Game.count + 1/16) % 1
+			Game.totalcount = Game.totalcount + 1/16
 		end
 	end
 end

@@ -4,7 +4,7 @@ Song = class:new()
 
 function Song:init(name)
 	local dir = "Songs/"..name
-	local data = LON.decode(dir.."/data.lon")
+	local data = LON.decode(love.filesystem.read(dir.."/data.lon"))
 	
 	self.title = data.title or "N/A"
 	self.author = data.author or "N/A"

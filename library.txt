@@ -1,4 +1,8 @@
---[[The library for custom games to use.
+--[[
+This was basically a design document, many things are different now. I will turn this into documentation later.
+]]
+
+The library for custom games to use.
 
 --Example data.lon 
 {
@@ -49,12 +53,3 @@ COUNT_OFFBEAT, COUNT_BACKBEAT = 7
 
 Helper functions:
 RGE.newSound(name, bpm) --Returns a new sound object. Optionally, you can specify a tempo and it will change the pitch based on the songs current tempo.
-
-]]
-
---[[
-How a game works.
-
-Each game has specified nodes with a set weight.
-Then a beatmap is loaded and the weights of all the nodes in the beatmap are added together. Your in-game score is then each node that you press in-time to give you a percentage!
-]]
