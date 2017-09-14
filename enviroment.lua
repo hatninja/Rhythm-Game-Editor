@@ -1,5 +1,5 @@
 --For Manager.lua, this is a seperate file to make things cleaner.
-return function(dir)
+return function(dir,game)
 	local env = {
 		--Simplified Lua 5.1
 		assert = assert,

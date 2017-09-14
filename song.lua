@@ -11,23 +11,33 @@ function Song:init(name)
 	
 	self.offset = data.offset or 0
 	self.rate = 1/(data.bpm or 120)*60
-	self.precision = 1/16
+	--self.rates = {} --Perhaps we should do something like this for tempo changes.
 	
-	if lfs.isFile(dir.."/song.mp3") then self.song = la.newSource(dir.."/song.mp3")
-	elseif lfs.isFile(dir.."/song.wav") then self.song = la.newSource(dir.."/song.wav")
-	elseif lfs.isFile(dir.."/song.ogg") then self.song = la.newSource(dir.."/song.ogg")
+	local extension = ".mp3"
+	if not lfs.isFile(dir.."/song"..extension) then extension = ".wav" end
+	if not lfs.isFile(dir.."/song"..extension) then extension = ".ogg" end
+	if lfs.isFile(dir.."/song"..extension) then
+		self.song = la.newSource(dir.."/song"..extension)
 	end
-	--self.song:setPitch(0.75)
+	
+	self.waveform, self.waveform_quads, self.waveform_width, self.waveform_height = generateWaveform(dir.."/song"..extension, 200)
 end
 
---Doesn't support tempo changes yet.
 function Song:countToTime(count) return self.offset+self.rate*count end
 function Song:timeToCount(time) return (time-self.offset)/self.rate end
 
 function Song:getPos() return self.song:tell() end
 function Song:setPos(to) return self.song:seek(to) end
 function Song:getDuration() return self.song:getDuration() end
+function Song:isPlaying() return self.song:isPlaying() end
 function Song:play() self.song:play() end
 function Song:resume() self.song:resume() end
 function Song:pause() self.song:pause() end
 function Song:stop() self.song:stop() end
+
+function Song:draw()
+	for i=1,#self.waveform_quads do
+		love.graphics.draw(self.waveform,self.waveform_quads[i],(i-1)*self.waveform_width,0,0,1,100/self.waveform_height)
+		if debug then love.graphics.print(i,(i-1)*self.waveform_width,0) end
+	end
+end

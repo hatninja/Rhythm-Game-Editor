@@ -17,18 +17,25 @@ function Manager:init(game)
 	if love.filesystem.isFile(dir.."/main.lua") then
 		self.code = love.filesystem.load(dir.."/main.lua")
 		if self.code then
-			self.env = newEnviroment(dir)
+			self.env = newEnviroment(dir,game)
 			setfenv(self.code,self.env)
 			self.code()
+			
+			setfenv(function() 
+				if Game.load then
+					Game.load()
+				end
+			end,self.env)()
 		end
 	end
 end
 
-function Manager:run(func)
-	if self.code then
-		setfenv(func, self.env)
-		func()
+function Manager:reset()
+	setfenv(1, self.env)
+	if Game.reset then
+		Game.reset(dt)
 	end
+	setfenv(1, real_g)
 end
 
 function Manager:update(dt)
@@ -40,7 +47,6 @@ function Manager:update(dt)
 end
 
 function Manager:draw()
---	if not self.data.nodes[1].cues[1] then return end
 	setfenv(1, self.env)
 	if Game.draw then
 		Game.draw(dt)
@@ -49,20 +55,27 @@ function Manager:draw()
 	setfenv(1, real_g)
 end
 
+
+function Manager:press(b)
+	setfenv(1, self.env)
+	if Game.press then
+		Game.press(b)
+	end
+	setfenv(1, real_g)
+end
+
+
 function Manager:count(c,tc)
 	setfenv(1, self.env)
 	if Game.count then
-		local prevnodes = getPreviousNodes()
-		Game.count(c,tc,prevnodes)
+		Game.count(c,tc)
 	end
-	
 	if Game.cue then
-		for i,node in pairs(real_g.Game.beatmap) do
-			local nodedata = self.data.nodes[node[1]]
-			if nodedata and nodedata.cues then
-				for index,time in ipairs(nodedata.cues) do
-					if tc == real_g.Game.song:timeToCount(node[2])+time then
-						Game.cue(index,node)
+		for i,node in ipairs(real_g.Game.beatmap) do
+			if self.data.nodes[node.id].cues then
+				for i2,cue in ipairs(self.data.nodes[node.id].cues) do
+					if node.count+math.round(cue,1/16) == tc then
+						Game.cue(i2,node)
 					end
 				end
 			end

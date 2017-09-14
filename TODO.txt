@@ -1,0 +1,36 @@
+TO-DO:
+	-DONE- Convert Nodes to be count based, not time.
+	-DONE- Change Node structure to be more verbose, i.e. key-value pairs.
+	Make sandbox Nodes edit-safe.
+	Support string ids for nodes.
+	
+	Add button presses
+	Add hit/misses
+	Add holding
+	
+	
+	Fill out library functions.
+	
+	Add tags
+	
+	Add scoring system.
+	
+	Advanced actions.
+	
+	Add more editor UI.
+	Re-add beatfinder.
+	Add regular UI.
+
+	Make a (not-copyright-infringing) example game.
+	
+	Support for tempo changes in songs.
+	Add remixes
+	Controller support
+	
+
+BUGS:
+
+
+
+-FIXED- Cues don't play for every node.
+-FIXED- Waveforms don't properly show anymore. 

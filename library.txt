@@ -14,9 +14,10 @@ The library for custom games to use.
 			color = "#FFFFFF", --Helpful color for editors
 			
 			button = 1 --Button number. Positive is pressed, negative is released.
-			weight = 1 --Score of the node when pressed.
+			weight = 1 --Score of the node when executed perfectly.
 			
-			cues = {-1,-0.5}, --Adds cues at the specified beat relative to this node.
+			cues = {-1,-0.5}, --Adds cues at the specified count relative to this node.
+			action = {1}
 		}
 	}
 }
@@ -25,17 +26,21 @@ The library for custom games to use.
 
 Callbacks: (handled by the game manager)
 
-game.load() --Like Love2d load
-game.reset()
+game.load() --Initialize all your stuff here.
+game.reset() --Reset the scene, by default it'll be game.load
 
-game.update(dt) --Like Love2d update
-game.draw() --Like Love2d draw
+game.update(dt) --Updates every frame.
+
+
+game.count(count, totalcount) --This calls for every 16th of a beat.
+game.cue(index, node) --Activates on passing a cue. Index is the id for the cue, specified in data.lon. Node is the node the cue belongs to.
+
+
+game.draw() --Put drawing code here.
 
 game.press(button) --Callback for a button press. Inverted numbers mean button release.
 
-game.count(count, totalcount) --This activates on every 16th of a beat. Used for bopping and the like.
 
-game.cue(index, node) --Activates on passing a cue for a node. Index is basically the id for the cue, specified in data.lon
 
 game.hit(button, node, accuracy) - Callback for a correct on-time button press.
 game.miss(button, node, accuracy) - Callback for when you miss a node entirely.
@@ -44,12 +49,12 @@ game.tag(marker) --May be a number for game-specific tags or a string for manage
 
 game.songfinish(percent) - Callback for when the song finishes. Return a message for playing.
 
-Constants:
 
-for use with game.count or game.cue
-COUNT_BEAT = 0
-COUNT_OFFBEAT, COUNT_BACKBEAT = 7
+New Functions:
 
+math.interpolate(a,b,lambda)
+A big help for making things move along the beat.
 
-Helper functions:
-RGE.newSound(name, bpm) --Returns a new sound object. Optionally, you can specify a tempo and it will change the pitch based on the songs current tempo.
+math.round(n, nearest)
+math.wrap(n, max,min)
+math.clamp(n, max,min)
