@@ -1,6 +1,6 @@
 # Rhythm Game Editor Engine
-A temporary title.  
+(A temporary title.)
 
-This is a game/engine designed for making rhythm heaven-style games. Mechanics are far from complete though, and i'm in the middle of revitalizing it.
+This project uses LÖVE
 
-Documentation soon!
+It is a Game/Engine designed for making Rhythm Heaven-style games.

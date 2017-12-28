@@ -8,14 +8,14 @@ TO-DO:
 	Add hit/misses
 	Add holding
 	
+	How to do marching games...
+	More complex patterns. (Such as Figure Fighters "Go Go Go!")
 	
 	Fill out library functions.
 	
 	Add tags
-	
 	Add scoring system.
 	
-	Advanced actions.
 	
 	Add more editor UI.
 	Re-add beatfinder.

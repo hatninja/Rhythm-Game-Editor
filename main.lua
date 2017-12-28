@@ -3,6 +3,7 @@ LON = require "lib.lon"
 require "lib.class"
 
 require "functions"
+require "run"
 
 --Classes
 require "manager"
@@ -19,7 +20,7 @@ function love.load()
 	love.graphics.setDefaultFilter("nearest","nearest",0)
 	
 	
-	changestate(Game,"running90s",nil,"Cheer Readers")
+	changestate(Game,"Karate Man Fever",nil,"Cheer Readers")
 end
 
 function love.update(dt)
